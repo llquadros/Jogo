@@ -8,19 +8,22 @@ pygame.init()
 #----------------- Criação da Tela --------------------#
 LARGURA= 700
 ALTURA= 400
+altura_chão = 360
+altura_boneco = 10
+posicao_y_boneco = altura_chão - altura_boneco 
+posicao_x_boneco = 175 #posição eixo x do jogador
+
 window = pygame.display.set_mode((LARGURA, ALTURA))
 pygame.display.set_caption('THE ARCHER')
 
 # carregando imagens
-cenario = pygame.image.load("cenário.png").convert_alpha()
+cenario = pygame.image.load("cenário.jpg").convert()
 
 #----------------- Inicia estrutura de dados --------------------#
 game=True
 
 #----------------- Assets --------------------#
 #imagens
-
-
 
 #----------------- Pre sets --------------------#
 
@@ -29,75 +32,79 @@ Gravidade = 5
 clock = pygame.time.Clock()
 
 #classes
-class flecha:
-    def __init__(self,x_coord,y_coord):
-        self.x=x_coord
-        self.y=y_coord
+class Flecha(pygame.sprite.Sprite):
+    def __init__(self, img):
+        # Construtor da classe mãe (Sprite).
+        pygame.sprite.Sprite.__init__(self)
+ 
+        self.image = img
+        self.rect = self.image.get_rect()
+        self.rect.x = (posicao_x_boneco)
+        self.rect.y = (posicao_y_boneco + 1/3 * altura_boneco)
+        self.speedy = (6)
+        self.gravidade = (0.1)
+        #self.speedx = (funçao)
+        self.mask = pygame.mask.from_surface(fruit_img)
+        self.mask = pygame.mask.from_surface(fruit2_img)
 
-    def distancia(self, outro_ponto):
-        dx= outro_ponto.x - self.x
-        dy=outro_ponto.y- self.y
-        return ()
+    def update(self):
+        # Atualizando a posição da fruta 
+        self.rect.y += -self.speedy + self.gravidade
+        # Se a fruta passar do final da tela, volta para cima e sorteia
+        # novas posições e velocidades
+        if self.rect.top > HEIGHT or self.rect.right < 0 or self.rect.left > WIDTH:
+            self.rect.x = random.randint(0, WIDTH-FRUIT_WIDTH)
+            self.rect.y = random.randint(-100, -FRUIT_HEIGHT)
+            self.speedy = random.randint(2, 5)
 
-while True:
+class arqueiro:
+    def __init__(self, img):
+
+while game:
     fps = clock.tick(60) #define FPS 
     eventos = pygame.event.get() # função que pega qualquer evento dentro da janela (qualquer botao clicado)
     for evento in eventos:
         if evento.type == pygame.QUIT:
             pygame.quit()# finaliza pygame
             sys.exit()#finaliza sistema
+            game = False
 
     window.blit(cenario, (0, 0))
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-#----------------- Loop principal --------------------#
-
-while game:
-    # ----- Trata eventos
-    for event in pygame.event.get():
-        # ----- Verifica consequências
-        if event.type == pygame.QUIT:
-            game = False
+    pygame.display.flip()# atualiza a tela 
     
-    window.fill((0, 0, 0))  # Preenche com a cor branca
-    window.blit(image, (100, 100))
 
-    # ----- Atualiza estado do jogo
-    pygame.display.update()  # Mostra o novo frame para o jogador
 
-# ===== Finalização =====
-pygame.quit()  # Função do PyGame que finaliza os recursos utilizados
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
 
 
 
