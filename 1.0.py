@@ -10,7 +10,7 @@ pygame.display.set_caption('THE ARCHER')
 
 #----------------- Inicia estrutura de dados --------------------#
 game=True
-
+print('oi')
 #----------------- Assets --------------------#
 #imagens
 
