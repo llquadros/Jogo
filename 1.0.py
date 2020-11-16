@@ -22,9 +22,17 @@ game=True
 
 Gravidade = 5
 
-
+clock = pygame.time.Clock()
 
 TipoTerreno = {T:"Terra",F: "Fundo", P:"Plataforma"}
+
+while True:
+    fps = clock.tick(60) #define FPS 
+    eventos = pygame.event.get() # função que pega qualquer evento dentro da janela (qualquer botao clicado)
+    for evento in eventos:
+        if evento.type == pygame.QUIT:
+            pygame.quit()# finaliza pygame
+            sys.exit()#finaliza sistema
 
 
 
