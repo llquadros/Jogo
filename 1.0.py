@@ -1,6 +1,4 @@
 import pygame
-import os
-import sys
 
 pygame.init()
 
@@ -35,7 +33,15 @@ while True:
             sys.exit()#finaliza sistema
 
 
+class flecha:
+    def __init__(self,x_coord,y_coord):
+        self.x=x_coord
+        self.y=y_coord
 
+    def distancia(self, outro_ponto):
+        dx= outro_ponto.x - self.x
+        dy=outro_ponto.y- self.y
+        return ()
 
 
 
