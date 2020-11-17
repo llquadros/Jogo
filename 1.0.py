@@ -18,6 +18,8 @@ pygame.display.set_caption('THE ARCHER')
 
 # carregando imagens
 cenario = pygame.image.load("cenário.jpg").convert()
+image_abertura_jogo = pygame.image.load('imagem_inicial_jogo.png').convert() #imagem de abertura do jogo exemplo
+image_abertura_jogo = pygame.transform.scale(image, (620, 400)) #alterando dimensoes da imagem de abertura jogo
 
 #----------------- Inicia estrutura de dados --------------------#
 game=True
@@ -61,7 +63,7 @@ class arqueiro:
     def __init__(self, img):
 
 while game:
-    fps = clock.tick(60) #define FPS 
+    fps = clock.tick(60) #define FPS
     eventos = pygame.event.get() # função que pega qualquer evento dentro da janela (qualquer botao clicado)
     for evento in eventos:
         if evento.type == pygame.QUIT:
@@ -70,8 +72,8 @@ while game:
             game = False
 
     window.blit(cenario, (0, 0))
-    pygame.display.flip()# atualiza a tela 
-    
+    pygame.display.flip()# atualiza a tela
+
 
 
 
