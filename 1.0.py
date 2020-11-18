@@ -79,9 +79,9 @@ class Dragão(pygame.sprite.Sprite):
         self.image= img 
         self.rect= self.image.get_rect()
         self.rect.x= random.randint(LARGURA-LARGURA/5, LARGURA)
-        self.rect.y= random.randint(0,ALTURA-altura_chão)
-        self.speedx= -10
-        self.speedy= 10
+        self.rect.y= random.randint(0, ALTURA-altura_chão)
+        self.speedx= -2
+        self.speedy= 2
 
     def update (self, fps):
         self.rect.x += self.speedx
@@ -107,8 +107,8 @@ ob_dragao= Dragão(dragao_img)
 sprites = pygame.sprite.Group()
 #criando flecha
 sprites.add(ob_flecha)
-sprites.add(ob_dragao)
-sprite.add(ob_dragao2)
+
+
 
 # loop de criação dos dragões 
 for i in range(4):
