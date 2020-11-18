@@ -25,19 +25,14 @@ arquivo1 = os.path.join('imagens', 'flecha.png')
 # carregando imagem
 try:
     cenario = pygame.image.load(arquivo0).convert()
-    flecha = pygame.image.load(arquivo1).convert_alpha()
+    flecha_img = pygame.image.load(arquivo1).convert_alpha()
 except pygame.error:
     sys.exit()
 
 #modificando escala das imagens    
-flecha = pygame.transform.scale(flecha, (100, 100))
+flecha_img = pygame.transform.scale(flecha_img, (100, 100))
 #----------------- Inicia estrutura de dados --------------------#
 game=True
-
-#----------------- Assets --------------------#
-#imagens
-
-#----------------- Pre sets --------------------#
 
 Gravidade = 5
 
@@ -51,26 +46,32 @@ class Flecha(pygame.sprite.Sprite):
  
         self.image = img
         self.rect = self.image.get_rect()
-        self.rect.x = (posicao_x_boneco)
-        self.rect.y = (posicao_y_boneco + 1/3 * altura_boneco)
+        self.rect.x = (200)
+        self.rect.y = (200)
         self.speedy = (6)
         self.gravidade = (0.1)
         #self.speedx = (funçao)
-        self.mask = pygame.mask.from_surface(fruit_img)
-        self.mask = pygame.mask.from_surface(fruit2_img)
+        # self.mask = pygame.mask.from_surface(fruit_img)
+        # self.mask = pygame.mask.from_surface(fruit2_img)
 
-    def update(self):
-        # Atualizando a posição da fruta 
-        self.rect.y += -self.speedy + self.gravidade
-        # Se a fruta passar do final da tela, volta para cima e sorteia
-        # novas posições e velocidades
-        if self.rect.top > HEIGHT or self.rect.right < 0 or self.rect.left > WIDTH:
-            self.rect.x = random.randint(0, WIDTH-FRUIT_WIDTH)
-            self.rect.y = random.randint(-100, -FRUIT_HEIGHT)
-            self.speedy = random.randint(2, 5)
+    # def update(self, fps):
+    #     # Atualizando a posição da fruta 
+    #     self.rect.y += -self.speedy + self.gravidade
+    #     # Se a fruta passar do final da tela, volta para cima e sorteia
+    #     # novas posições e velocidades
+    #     if self.rect.top > HEIGHT or self.rect.right < 0 or self.rect.left > WIDTH:
+    #         self.rect.x = random.randint(0, WIDTH-FRUIT_WIDTH)
+    #         self.rect.y = random.randint(-100, -FRUIT_HEIGHT)
+    #         self.speedy = random.randint(2, 5)
 
 # class arqueiro:
 #     def __init__(self, img):
+
+ob_flecha = Flecha(flecha_img)
+sprites = pygame.sprite.Group()
+#criando flecha
+sprites.add(ob_flecha)
+
 
 while game:
     fps = clock.tick(60) #define FPS
@@ -82,7 +83,8 @@ while game:
             game = False
 
     window.blit(cenario, (0, 0))
-    window.blit(flecha, (200, 200))
+    sprites.update(fps)
+    sprites.draw(window)
     pygame.display.flip()# atualiza a tela
 
 
