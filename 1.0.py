@@ -18,9 +18,19 @@ posicao_x_boneco = 175 #posição eixo x do jogador
 window = pygame.display.set_mode((LARGURA, ALTURA))
 pygame.display.set_caption('THE ARCHER')
 
-# carregando imagens
-cenario = pygame.image.load("cenário.jpg").convert()
+# linkando pasta com arquivo
+arquivo0 = os.path.join('imagens', 'cenário.jpg')
+arquivo1 = os.path.join('imagens', 'flecha.png')
 
+# carregando imagem
+try:
+    cenario = pygame.image.load(arquivo0).convert()
+    flecha = pygame.image.load(arquivo1).convert_alpha()
+except pygame.error:
+    sys.exit()
+
+#modificando escala das imagens    
+flecha = pygame.transform.scale(flecha, (100, 100))
 #----------------- Inicia estrutura de dados --------------------#
 game=True
 
@@ -72,6 +82,7 @@ while game:
             game = False
 
     window.blit(cenario, (0, 0))
+    window.blit(flecha, (200, 200))
     pygame.display.flip()# atualiza a tela
 
 
