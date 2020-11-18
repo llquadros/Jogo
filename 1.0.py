@@ -4,6 +4,8 @@ import sys
 
 pygame.init()
 
+#testando
+
 #testando github
 #----------------- Criação da Tela --------------------#
 LARGURA= 700
