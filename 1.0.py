@@ -1,6 +1,7 @@
 import pygame
 import os
 import sys
+import random
 
 pygame.init()
 
@@ -21,16 +22,20 @@ pygame.display.set_caption('THE ARCHER')
 # linkando pasta com arquivo
 arquivo0 = os.path.join('imagens', 'cenário.jpg')
 arquivo1 = os.path.join('imagens', 'flecha.png')
+arquivo2 = os.path.join('imagens','Dragão' ,'frame-1.png')
+
 
 # carregando imagem
 try:
     cenario = pygame.image.load(arquivo0).convert()
     flecha_img = pygame.image.load(arquivo1).convert_alpha()
+    dragao_img= pygame.image.load(arquivo2).convert_alpha()
 except pygame.error:
     sys.exit()
 
 #modificando escala das imagens    
 flecha_img = pygame.transform.scale(flecha_img, (100, 100))
+dragao_img = pygame.transform.scale(dragao_img, (100, 100))
 #----------------- Inicia estrutura de dados --------------------#
 game=True
 
@@ -64,13 +69,53 @@ class Flecha(pygame.sprite.Sprite):
     #         self.rect.y = random.randint(-100, -FRUIT_HEIGHT)
     #         self.speedy = random.randint(2, 5)
 
+
+
+class Dragão(pygame.sprite.Sprite):
+
+    def __init__(self, img):
+        pygame.sprite.Sprite.__init__(self)
+
+        self.image= img 
+        self.rect= self.image.get_rect()
+        self.rect.x= random.randint(LARGURA-LARGURA/5, LARGURA)
+        self.rect.y= random.randint(0,ALTURA-altura_chão)
+        self.speedx= -10
+        self.speedy= 10
+
+    def update (self, fps):
+        self.rect.x += self.speedx
+        self.rect.y += self.speedy
+
+        # if self.rect.left = 0:
+        #     self.speedx = 0
+        # if self.rect.botton = altura_chão:
+        #     self.speedy = 0
+
+
+
+
+
 # class arqueiro:
 #     def __init__(self, img):
 
 ob_flecha = Flecha(flecha_img)
+ob_dragao= Dragão(dragao_img)
+
+# for dragao in Dragão
+#     ob_dragao = Dragão()
 sprites = pygame.sprite.Group()
 #criando flecha
 sprites.add(ob_flecha)
+sprites.add(ob_dragao)
+sprite.add(ob_dragao2)
+
+# loop de criação dos dragões 
+for i in range(4):
+    ob_dragao= Dragão(dragao_img)
+    sprites.add(ob_dragao)
+    
+
 
 
 while game:
