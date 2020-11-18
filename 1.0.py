@@ -59,16 +59,16 @@ class Flecha(pygame.sprite.Sprite):
             self.rect.y = random.randint(-100, -FRUIT_HEIGHT)
             self.speedy = random.randint(2, 5)
 
-class arqueiro:
-    def __init__(self, img):
+# class arqueiro:
+#     def __init__(self, img):
 
-#while game:
-    #fps = clock.tick(60) #define FPS
-    #eventos = pygame.event.get() # função que pega qualquer evento dentro da janela (qualquer botao clicado)
-    #for evento in eventos:
-        #if evento.type == pygame.QUIT:
-            #pygame.quit()# finaliza pygame
-            #sys.exit()#finaliza sistema
+while game:
+    fps = clock.tick(60) #define FPS
+    eventos = pygame.event.get() # função que pega qualquer evento dentro da janela (qualquer botao clicado)
+    for evento in eventos:
+        if evento.type == pygame.QUIT:
+            pygame.quit()# finaliza pygame
+            sys.exit()#finaliza sistema
             game = False
 
     window.blit(cenario, (0, 0))
