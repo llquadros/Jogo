@@ -116,8 +116,6 @@ for i in range(4):
     sprites.add(ob_dragao)
     
 
-
-
 while game:
     fps = clock.tick(60) #define FPS
     eventos = pygame.event.get() # função que pega qualquer evento dentro da janela (qualquer botao clicado)
@@ -126,6 +124,18 @@ while game:
             pygame.quit()# finaliza pygame
             sys.exit()#finaliza sistema
             game = False
+
+    
+
+    # Verifica se houve contato entre o player e a bomba
+    hits = pygame.sprite.spritecollide(ob_flecha, ob_dragao, True, pygame.sprite.collide_mask)
+    
+    for dragao in hits:
+        #pop_sound.play()
+        d = Dragão(dragao_img)
+        score += 10               
+        sprites.add(d)
+        sprites.add(d)
 
     window.blit(cenario, (0, 0))
     sprites.update(fps)
