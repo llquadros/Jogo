@@ -114,7 +114,9 @@ sprites.add(ob_flecha)
 for i in range(4):
     ob_dragao= Dragão(dragao_img)
     sprites.add(ob_dragao)
-    
+
+#contador marcador de pontos
+score = 0     
 
 while game:
     fps = clock.tick(60) #define FPS
@@ -138,6 +140,12 @@ while game:
         sprites.add(d)
 
     window.blit(cenario, (0, 0))
+    #adiciona o score na tela
+    # text_surface = assets['score_font'].render("{:08d}".format(score), True, (255, 255, 0))
+    # text_rect = text_surface.get_rect()
+    # text_rect.midtop = (WIDTH / 2,  10)
+    # window.blit(text_surface, text_rect)
+
     sprites.update(fps)
     sprites.draw(window)
     pygame.display.flip()# atualiza a tela
