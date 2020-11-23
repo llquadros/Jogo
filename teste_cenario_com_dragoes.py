@@ -37,7 +37,7 @@ dragao_speedy = random.randint(2,9)
 
 # Variável para o ajuste de velocidade
 clock = pygame.time.Clock()
-FPS = 15
+FPS = 32
 
 
 # ===== Loop principal =====

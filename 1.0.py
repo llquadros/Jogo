@@ -98,6 +98,19 @@ class Dragão(pygame.sprite.Sprite):
 # class arqueiro:
 #     def __init__(self, img):
 
+
+
+
+
+
+
+
+
+
+
+
+
+
 ob_flecha = Flecha(flecha_img)
 ob_dragao= Dragão(dragao_img)
 
