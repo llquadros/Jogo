@@ -16,9 +16,12 @@ pygame.display.set_caption('The Archer')
 dragao_width = 50
 dragao_height = 38
 font = pygame.font.SysFont(None, 48)
-background= os.path.join('imagens', 'cenário.jpg').convert()
-dragao_image = os.path.join('imagens','Dragão' ,'frame-1.png').convert_alpha()
-dragao_image_reajuste = pygame.transform.scale(dragao_image,(dragao_with,dragao_height))
+background = os.path.join('imagens', 'cenário.jpg')
+background = pygame.image.load(background).convert()
+
+dragao_image = os.path.join('imagens','Dragão' ,'frame-1.png')
+dragao_image= pygame.image.load(dragao_image).convert_alpha()
+dragao_image_reajuste = pygame.transform.scale(dragao_image,(dragao_width,dragao_height))
 
 # ----- Inicia estruturas de dados
 game = True
@@ -26,9 +29,9 @@ game = True
 # Como x é o lado esquerdo da imagem, ele só pode ir até a largura da
 # janela menos a largura da imagem
 dragao_x = random.randint(0, WIDTH-dragao_width)
-# y negativo significa que está acima do topo da janela. O meteoro começa fora da janela
+# y negativo significa que está acima do topo da janela. O dragao começa fora da janela
 dragao_y = random.randint(-100, -dragao_height)
-# Sorteia velocidade do meteoro
+# Sorteia velocidade do dragao
 dragao_speedx = random.randint(-3,3)
 dragao_speedy = random.randint(2,9)
 
@@ -49,10 +52,10 @@ while game:
 
 
  # ----- Atualiza estado do jogo
-    # Atualizando a posição do meteoro
+    # Atualizando a posição do dragao
     dragao_x += dragao_speedx
     dragao_y+= dragao_speedy
-    # Se o meteoro passar do final da tela, volta para cima e sorteia
+    # Se o dragao passar do final da tela, volta para cima e sorteia
     # novas posições e velocidades
     if dragao_y > HEIGHT or dragao_x + dragao_width < 0 or dragao_x > WIDTH:
         dragao_x = random.randint(0,WIDTH-dragao_width)
