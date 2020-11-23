@@ -79,6 +79,8 @@ class Dragão(pygame.sprite.Sprite):
         self.rect.y= random.randint(0, ALTURA-altura_chão)
         self.speedx= -2
         self.speedy= 2
+        self.mask = pygame.mask.from_surface(dragao_img)
+        self.mask = pygame.mask.from_surface(dragao_img)
 
     def update (self, fps):
         self.rect.x += self.speedx
@@ -102,15 +104,15 @@ ob_dragao= Dragão(dragao_img)
 # for dragao in Dragão
 #     ob_dragao = Dragão()
 sprites = pygame.sprite.Group()
+sprites2 = pygame.sprite.Group()
 #criando flecha
 sprites.add(ob_flecha)
-
 
 
 # loop de criação dos dragões 
 for i in range(4):
     ob_dragao= Dragão(dragao_img)
-    sprites.add(ob_dragao)
+    sprites2.add(ob_dragao)
 
 #contador marcador de pontos
 score = 0     
@@ -127,14 +129,14 @@ while game:
     
 
     # Verifica se houve contato entre o player e a bomba
-    hits = pygame.sprite.spritecollide(ob_flecha, ob_dragao, True, pygame.sprite.collide_mask)
+    hits = pygame.sprite.spritecollide(ob_flecha, sprites2, True, pygame.sprite.collide_mask)
     
     for dragao in hits:
         #pop_sound.play()
         d = Dragão(dragao_img)
         score += 10               
-        sprites.add(d)
-        sprites.add(d)
+        sprites2.add(d)
+        sprites2.add(d)
 
     window.blit(cenario, (0, 0))
     #adiciona o score na tela
@@ -145,6 +147,8 @@ while game:
 
     sprites.update(fps)
     sprites.draw(window)
+    sprites2.update(fps)
+    sprites2.draw(window)
     pygame.display.flip()# atualiza a tela
 
 
