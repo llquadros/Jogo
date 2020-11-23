@@ -53,14 +53,19 @@ class Arqueiro(pygame.sprite.Sprite):
         if self.rect.left < 0:
             self.rect.left = 0
 
+    def shoot(self):
+        bullet = Bullet(self.rect.topleft,self.rect.top)
+        all_sprites.add(bullet)
+        bullets.add(bullet)
+
 class Mob(pygame.sprite.Sprite):
     def __init__(self):
         pygame.sprite.Sprite.__init__(self)
         self.image = pygame.Surface((30, 40))
         self.image.fill(RED)
         self.rect = self.image.get_rect()
-        self.rect.x = random.randrange(HEIGHT- self.rect.width)
-        self.rect.y = random.randrange(-200, -100,2)
+        self.rect.x = random.randrange(WIDTH- self.rect.height)
+        self.rect.y = random.randrange(-200, -40)
         self.speedy = random.randrange(1, 8)
         self.speedx = random.randrange(-1,3)
 
@@ -70,13 +75,33 @@ class Mob(pygame.sprite.Sprite):
         if self.rect.right > HEIGHT + 10 or self.rect.left <-25 or self.rect.right>WIDTH+20:
             self.rect.x = random.randrange(WIDTH - self.rect.width)
             self.rect.y = random.randrange(-100, -40)
-            self.speedy = random.randrange(1, 8)
+            self.speedy = random.randrange(1, 6)
+
+
+class Bullet(pygame.sprite.Sprite):#classe para flechas
+    def __init__(self, x, y):
+        pygame.sprite.Sprite.__init__(self)
+        self.image = pygame.Surface((10, 20))
+        self.image.fill(YELLOW)
+        self.rect = self.image.get_rect()
+        self.rect.bottom = y
+        self.rect.topleft= x
+        self.speedy = -10
+
+    def update(self):
+        self.rect.y += self.speedy
+        # kill if it moves off the top of the screen
+        if self.rect.bottom < 0:
+            self.kill()
+
+
 
 
 
 
 all_sprites = pygame.sprite.Group()
 mobs =pygame.sprite.Group()
+bullets = pygame.sprite.Group()
 arqueiro = Arqueiro()
 all_sprites.add(arqueiro)
 for i in range(8):
@@ -96,12 +121,33 @@ while running:
         # check for closing window
         if event.type == pygame.QUIT:
             running = False
+        elif event.type == pygame.KEYDOWN:
+            if event.key == pygame.K_SPACE:
+                arqueiro.shoot()
+
+
 
 
 
     # ----- Atualiza estado do jogo
     all_sprites.update()
     pygame.display.update()
+
+#verifica se a flecha atinge o dragão
+    hits = pygame.sprite.groupcollide(mobs,bullets,True,True)
+    for hit in hits:
+        m = Mob()
+        all_sprites.add(m)
+        mobs.add(m)
+
+
+
+#verifica se o dragão colide com o arqueiro
+    hits = pygame.sprite.spritecollide(arqueiro,mobs,False)
+    if hits:
+        running = False
+
+
 
     # ----- Gera saídas
     window.fill((0, 0, 0))  # Preenche com a cor branca
