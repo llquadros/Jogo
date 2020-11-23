@@ -24,7 +24,7 @@ arquivo2 = os.path.join('imagens','Dragão' ,'frame-1.png')
 
 # carregando imagem
 try:
-    cenario = pygame.image.load(arquivo0).convert()
+    cenario = pygame.image.load(arquivo0).convert() #imagem de backgroud
     flecha_img = pygame.image.load(arquivo1).convert_alpha()
     dragao_img= pygame.image.load(arquivo2).convert_alpha()
 except pygame.error:
