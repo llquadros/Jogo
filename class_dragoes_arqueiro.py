@@ -5,6 +5,8 @@ import random
 import os
 
 
+
+
 # ----- Gera tela principal
 
 WIDTH = 700
@@ -28,15 +30,25 @@ clock = pygame.time.Clock()
 
 # ----- Inicia assets
 background = os.path.join('imagens', 'cenário.jpg')
-background = pygame.image.load(background).convert()
+dragao_image = os.path.join('imagens','Dragão' ,'frame-1.png')
+arqueiro_image = os.path.join('imagens','archer.png')
+flecha_image = os.path.join('imagens','flecha.png')
+
+#carrega imagens
+background = pygame.image.load(background)
+dragao_image = pygame.image.load(dragao_image).convert_alpha()
+arqueiro_image = pygame.image.load(arqueiro_image).convert_alpha()
+flecha_image = pygame.image.load(flecha_image).convert_alpha()
+
+
+#reajuste de tamanho das imagens
 
 class Arqueiro(pygame.sprite.Sprite):
     def __init__(self):
         pygame.sprite.Sprite.__init__(self)
-        self.image = pygame.Surface((50, 40))
-        self.image.fill(GREEN)
+        self.image = pygame.transform.scale(arqueiro_image,(80,60))
         self.rect = self.image.get_rect()
-        self.rect.left = WIDTH
+        self.rect.centerx = WIDTH/10
         self.rect.bottom = HEIGHT - 10
         self.speedx = 0
 
@@ -61,12 +73,11 @@ class Arqueiro(pygame.sprite.Sprite):
 class Mob(pygame.sprite.Sprite):
     def __init__(self):
         pygame.sprite.Sprite.__init__(self)
-        self.image = pygame.Surface((30, 40))
-        self.image.fill(RED)
+        self.image = pygame.transform.scale(dragao_image ,(60,35))
         self.rect = self.image.get_rect()
-        self.rect.x = random.randrange(WIDTH- self.rect.height)
-        self.rect.y = random.randrange(-200, -40)
-        self.speedy = random.randrange(1, 8)
+        self.rect.x = random.randrange(HEIGHT- self.rect.height)
+        self.rect.y = random.randrange(-100, -40)
+        self.speedy = random.randrange(1, 2)
         self.speedx = random.randrange(-1,3)
 
     def update(self):
@@ -81,20 +92,17 @@ class Mob(pygame.sprite.Sprite):
 class Bullet(pygame.sprite.Sprite):#classe para flechas
     def __init__(self, x, y):
         pygame.sprite.Sprite.__init__(self)
-        self.image = pygame.Surface((10, 20))
-        self.image.fill(YELLOW)
+        self.image = pygame.transform.scale(flecha_image ,(100,50))
         self.rect = self.image.get_rect()
         self.rect.bottom = y
         self.rect.topleft= x
-        self.speedy = -10
+        self.speedy = -5
 
     def update(self):
         self.rect.y += self.speedy
         # kill if it moves off the top of the screen
         if self.rect.bottom < 0:
             self.kill()
-
-
 
 
 
