@@ -52,7 +52,13 @@ flecha_image = pygame.image.load(flecha_image).convert_alpha()
 
 #carregando sons
 
-musica_de_fundo = pygame.mixer.Sound(os.path.join(musics,"osn2u.mp3"))
+flecha_sound = pygame.mixer.Sound(os.path.join(musics,"explosion_dull.flac"))
+expl_sounds = []
+for music in ['explosion_dull.flac']:
+    expl_sounds.append(pygame.mixer.Sound(os.path.join(musics,music)))
+
+pygame.mixer.music.load(os.path.join(musics,'battle theme.flac'))
+pygame.mixer.music.set_volume(0.4)
 
 
 ##Escreve na Tela
@@ -91,7 +97,7 @@ class Arqueiro(pygame.sprite.Sprite):
         bullet = Bullet(self.rect.topleft,self.rect.top)
         all_sprites.add(bullet)
         bullets.add(bullet)
-        musica_de_fundo.play()
+        flecha_sound.play()
 
 
 
@@ -149,6 +155,8 @@ for i in range(8):
     mobs.add(m)
 
 score = 0  #pontuação inicial
+pygame.mixer.music.play(loops=-1)# #inicia musica de fundo
+
 
 # Game loop
 running = True
@@ -176,6 +184,7 @@ while running:
     hits = pygame.sprite.groupcollide(mobs,bullets,True,True)
     for hit in hits:
         score += 50 - hit.radius
+        random.choice(expl_sounds).play()
         m = Mob()
         all_sprites.add(m)
         mobs.add(m)
