@@ -71,6 +71,27 @@ def draw_text(surf, text, size, x, y):
     surf.blit(text_surface, text_rect)
 
 
+##....
+def newmob():
+    m = Mob()
+    all_sprites.add(m)
+    mobs.add(m)
+
+#funcão para o status bar
+def draw_shield_bar(surf, x, y, pct):
+    if pct < 0:
+        pct = 0
+    BAR_LENGTH = 100
+    BAR_HEIGHT = 10
+    fill = (pct / 100) * BAR_LENGTH
+    outline_rect = pygame.Rect(x, y, BAR_LENGTH, BAR_HEIGHT)
+    fill_rect = pygame.Rect(x, y, fill, BAR_HEIGHT)
+    pygame.draw.rect(surf, GREEN, fill_rect)
+    pygame.draw.rect(surf, WHITE, outline_rect, 2)
+
+
+
+
 class Arqueiro(pygame.sprite.Sprite):
     def __init__(self):
         pygame.sprite.Sprite.__init__(self)
@@ -79,6 +100,7 @@ class Arqueiro(pygame.sprite.Sprite):
         self.rect.centerx = WIDTH/10
         self.rect.bottom = HEIGHT - 10
         self.speedx = 0
+        self.shield = 100 #"status bar"-
 
     def update(self):
         self.speedx = 0
@@ -150,9 +172,7 @@ bullets = pygame.sprite.Group()
 arqueiro = Arqueiro()
 all_sprites.add(arqueiro)
 for i in range(8):
-    m = Mob()
-    all_sprites.add(m)
-    mobs.add(m)
+    newmob()
 
 score = 0  #pontuação inicial
 pygame.mixer.music.play(loops=-1)# #inicia musica de fundo
@@ -185,24 +205,25 @@ while running:
     for hit in hits:
         score += 50 - hit.radius
         random.choice(expl_sounds).play()
-        m = Mob()
-        all_sprites.add(m)
-        mobs.add(m)
+        newmob()
 
 
 
 #verifica se o dragão colide com o arqueiro
-    hits = pygame.sprite.spritecollide(arqueiro,mobs,False)
-    if hits:
-        running = False
+    hits = pygame.sprite.spritecollide(arqueiro,mobs,True, pygame.sprite.collide_circle)
+    for hit in hits: #se o "escudo" chegar a 0 o jogo termina
+        arqueiro.shield -= hit.radius * 2 #um escudo para cada acerto cm base em seu raio
+        newmob()
+        if arqueiro.shield <= 0:
+            running = False
 
 
-
-    # ----- Gera saídas
+    # ----- Gera saídas/desenhos na tela
     window.fill((0, 0, 0))  # Preenche com a cor branca
     window.blit(background, (0, 0))
     all_sprites.draw(window)
     draw_text(window,str(score),18,WIDTH/2,10)
+    draw_shield_bar(window,5,5,arqueiro.shield) #desenha status bar
 
 
 
