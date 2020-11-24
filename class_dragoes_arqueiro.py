@@ -34,6 +34,9 @@ dragao_image = os.path.join('imagens','Dragão' ,'frame-1.png')
 arqueiro_image = os.path.join('imagens','archer.png')
 flecha_image = os.path.join('imagens','flecha.png')
 
+
+
+
 #carrega imagens
 background = pygame.image.load(background)
 dragao_image = pygame.image.load(dragao_image).convert_alpha()
@@ -41,12 +44,21 @@ arqueiro_image = pygame.image.load(arqueiro_image).convert_alpha()
 flecha_image = pygame.image.load(flecha_image).convert_alpha()
 
 
-#reajuste de tamanho das imagens
+
+##Escreve na Tela
+font_name = pygame.font.match_font('arial') #fonte da letra
+def draw_text(surf, text, size, x, y):
+    font = pygame.font.Font(font_name, size)
+    text_surface = font.render(text, True, WHITE)
+    text_rect = text_surface.get_rect()
+    text_rect.midtop = (x, y)
+    surf.blit(text_surface, text_rect)
+
 
 class Arqueiro(pygame.sprite.Sprite):
     def __init__(self):
         pygame.sprite.Sprite.__init__(self)
-        self.image = pygame.transform.scale(arqueiro_image,(80,60))
+        self.image = pygame.transform.scale(arqueiro_image,(80,60))#reajuste de tamanho das imagens
         self.rect = self.image.get_rect()
         self.rect.centerx = WIDTH/10
         self.rect.bottom = HEIGHT - 10
@@ -70,15 +82,20 @@ class Arqueiro(pygame.sprite.Sprite):
         all_sprites.add(bullet)
         bullets.add(bullet)
 
-class Mob(pygame.sprite.Sprite):
+class Mob(pygame.sprite.Sprite):#classe dos dragões
     def __init__(self):
         pygame.sprite.Sprite.__init__(self)
         self.image = pygame.transform.scale(dragao_image ,(60,35))
         self.rect = self.image.get_rect()
+        self.radius = int(self.rect.width * .85/2)
         self.rect.x = random.randrange(HEIGHT- self.rect.height)
         self.rect.y = random.randrange(-100, -40)
         self.speedy = random.randrange(1, 2)
         self.speedx = random.randrange(-1,3)
+        self.rot = 0 #para os dragoes rotacionarem
+        self.rot_speed = random.randrange(-8,8) #velocida de rotacao
+        self_last_update = pygame.time.get_ticks()
+
 
     def update(self):
         self.rect.x += self.speedx
@@ -117,7 +134,7 @@ for i in range(8):
     all_sprites.add(m)
     mobs.add(m)
 
-
+score = 0  #pontuação inicial
 
 # Game loop
 running = True
@@ -144,6 +161,7 @@ while running:
 #verifica se a flecha atinge o dragão
     hits = pygame.sprite.groupcollide(mobs,bullets,True,True)
     for hit in hits:
+        score += 50 - hit.radius
         m = Mob()
         all_sprites.add(m)
         mobs.add(m)
@@ -161,7 +179,10 @@ while running:
     window.fill((0, 0, 0))  # Preenche com a cor branca
     window.blit(background, (0, 0))
     all_sprites.draw(window)
-    # *after* drawing everything, flip the display
+    draw_text(window,str(score),18,WIDTH/2,10)
+
+
+
     pygame.display.flip()
 
 # ===== Finalização =====
