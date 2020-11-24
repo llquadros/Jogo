@@ -1,5 +1,9 @@
 # ===== Inicialização =====
 # ----- Importa e inicia pacotes
+
+#obs: Musicas, sons e imagens são de codigo aberto , estavao portanto sem autores para eu colocar como ref.
+
+
 import pygame
 import random
 import os
@@ -34,6 +38,8 @@ dragao_image = os.path.join('imagens','Dragão' ,'frame-1.png')
 arqueiro_image = os.path.join('imagens','archer.png')
 flecha_image = os.path.join('imagens','flecha.png')
 
+musics = os.path.join(os.path.dirname(__file__),'musicas')
+
 
 
 
@@ -43,6 +49,10 @@ dragao_image = pygame.image.load(dragao_image).convert_alpha()
 arqueiro_image = pygame.image.load(arqueiro_image).convert_alpha()
 flecha_image = pygame.image.load(flecha_image).convert_alpha()
 
+
+#carregando sons
+
+musica_de_fundo = pygame.mixer.Sound(os.path.join(musics,"osn2u.mp3"))
 
 
 ##Escreve na Tela
@@ -81,6 +91,10 @@ class Arqueiro(pygame.sprite.Sprite):
         bullet = Bullet(self.rect.topleft,self.rect.top)
         all_sprites.add(bullet)
         bullets.add(bullet)
+        musica_de_fundo.play()
+
+
+
 
 class Mob(pygame.sprite.Sprite):#classe dos dragões
     def __init__(self):
