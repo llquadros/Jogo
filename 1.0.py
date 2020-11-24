@@ -65,7 +65,9 @@ class Flecha(pygame.sprite.Sprite):
     #         self.rect.x = random.randint(0, WIDTH-FRUIT_WIDTH)
     #         self.rect.y = random.randint(-100, -FRUIT_HEIGHT)
     #         self.speedy = random.randint(2, 5)
-
+    #     if self.rect.bottom < 0:
+    #        self.kill()
+    
 
 
 class Dragão(pygame.sprite.Sprite):
@@ -92,22 +94,8 @@ class Dragão(pygame.sprite.Sprite):
         #     self.speedy = 0
 
 
-
-
-
 # class arqueiro:
 #     def __init__(self, img):
-
-
-
-
-
-
-
-
-
-
-
 
 
 
@@ -130,6 +118,7 @@ for i in range(4):
 #contador marcador de pontos
 score = 0     
 
+pygame.time.set_timer(pygame.USEREVENT, 6000)
 while game:
     fps = clock.tick(60) #define FPS
     eventos = pygame.event.get() # função que pega qualquer evento dentro da janela (qualquer botao clicado)
@@ -139,8 +128,9 @@ while game:
             sys.exit()#finaliza sistema
             game = False
 
-    
-
+        if evento.type == pygame.USEREVENT:
+            ob_dragao= Dragão(dragao_img)    
+            sprites.add(ob_dragao)
     # Verifica se houve contato entre o player e a bomba
     hits = pygame.sprite.spritecollide(ob_flecha, sprites2, True, pygame.sprite.collide_mask)
     
