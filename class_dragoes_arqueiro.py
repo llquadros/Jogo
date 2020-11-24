@@ -38,16 +38,21 @@ dragao_image = os.path.join('imagens','Dragão' ,'frame-1.png')
 arqueiro_image = os.path.join('imagens','archer.png')
 flecha_image = os.path.join('imagens','flecha.png')
 
+
+
 musics = os.path.join(os.path.dirname(__file__),'musicas')
 
+alvo_image = os.path.join('imagens', 'alvo.png')
 
 
 
-#carrega imagens
+#carregando imagens
 background = pygame.image.load(background)
 dragao_image = pygame.image.load(dragao_image).convert_alpha()
 arqueiro_image = pygame.image.load(arqueiro_image).convert_alpha()
 flecha_image = pygame.image.load(flecha_image).convert_alpha()
+
+alvo_image = pygame.image.load(alvo_image).convert_alpha()
 
 
 #carregando sons
@@ -101,6 +106,7 @@ class Arqueiro(pygame.sprite.Sprite):
         self.rect.bottom = HEIGHT - 10
         self.speedx = 0
         self.shield = 100 #"status bar"-
+
 
     def update(self):
         self.speedx = 0
@@ -165,6 +171,38 @@ class Bullet(pygame.sprite.Sprite):#classe para flechas
 
 
 
+class Explosion(pygame.sprite.Sprite):
+    def __init__(self, center, size):
+        pygame.sprite.Sprite.__init__(self)
+        self.size = size
+        self.image = pygame.transform.scale(alvo_image ,(60,35))
+        self.rect = self.image.get_rect()
+        self.rect.center = center
+        self.frame = 0
+        self.last_update = pygame.time.get_ticks()
+        self.frame_rate = 50
+
+        def update(self):
+            now = pygame.time.get_ticks()
+            if now - self.last_update > self.frame_rate:
+                self.last_update = now
+                self.frame += 1
+                if self.frame == len(explosion_anim[self.size]):
+                    self.kill()
+                else:
+                    center = self.rect.center
+                    self.image = explosion_anim[self.size][self.frame]
+                    self.rect = self.image.get_rect()
+                    self.rect.center = center
+
+
+
+
+
+
+
+
+
 
 all_sprites = pygame.sprite.Group()
 mobs =pygame.sprite.Group()
@@ -205,6 +243,8 @@ while running:
     for hit in hits:
         score += 50 - hit.radius
         random.choice(expl_sounds).play()
+        expl = Explosion(hit.rect.center, 'lg')
+        all_sprites.add(expl)
         newmob()
 
 
@@ -213,6 +253,8 @@ while running:
     hits = pygame.sprite.spritecollide(arqueiro,mobs,True, pygame.sprite.collide_circle)
     for hit in hits: #se o "escudo" chegar a 0 o jogo termina
         arqueiro.shield -= hit.radius * 2 #um escudo para cada acerto cm base em seu raio
+        expl = Explosion(hit.rect.center, 'sm')
+        all_sprites.add(expl)
         newmob()
         if arqueiro.shield <= 0:
             running = False
