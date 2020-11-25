@@ -8,7 +8,7 @@ import pygame
 import random
 import os
 
-
+#teste
 
 
 # ----- Gera tela principal
