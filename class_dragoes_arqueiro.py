@@ -11,7 +11,6 @@ import math
 import time
 
 
-
 # ----- Gera tela principal
 
 WIDTH = 700
@@ -145,7 +144,7 @@ class Mob(pygame.sprite.Sprite):#classe dos dragões
         self.rect.x = random.randrange(HEIGHT- self.rect.height)
         self.rect.y = random.randrange(-100, -40)
         self.speedy = random.randrange(1, 2)
-        self.speedx = random.randrange(-1,3)
+        self.speedx = random.randrange(-2,2)
         self.rot = 0 #para os dragoes rotacionarem
         self.rot_speed = random.randrange(-8,8) #velocida de rotacao
         
@@ -155,10 +154,13 @@ class Mob(pygame.sprite.Sprite):#classe dos dragões
     def update(self):
         self.rect.x += self.speedx
         self.rect.y += self.speedy
-        if self.rect.right > HEIGHT + 10 or self.rect.left <-25 or self.rect.right>WIDTH+20:
-            self.rect.x = random.randrange(WIDTH - self.rect.width)
-            self.rect.y = random.randrange(-100, -40)
-            self.speedy = random.randrange(1, 6)
+        if self.rect.left > WIDTH or self.rect.right<0:
+            self.rect.x = random.randrange(0,WIDTH)
+            self.rect.y = random.randrange(0,-10)
+        elif self.rect.top > HEIGHT:
+            self.rect.x = random.randrange(0,WIDTH)
+            self.rect.y = random.randrange(0,-10)
+
 
 
 class Bullet(pygame.sprite.Sprite):#classe para flechas
@@ -170,6 +172,8 @@ class Bullet(pygame.sprite.Sprite):#classe para flechas
         self.rect.topleft= x
         self.speedy = my - arqueiro.rect.top 
         self.speedx = mx - arqueiro.rect.centerx
+        self.image = pygame.transform.rotate(self.image,20) #para rotacionar
+
     def update(self):
         self.rect.y += self.speedy/ 50
         self.rect.x += self.speedx/ 50
