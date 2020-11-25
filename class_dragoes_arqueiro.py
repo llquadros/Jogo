@@ -8,7 +8,7 @@ import pygame
 import random
 import os
 import math
-
+import time
 
 
 
@@ -292,11 +292,27 @@ while running:
     window.blit(background, (0, 0))
     all_sprites.draw(window)
     draw_text(window,str(score),18,WIDTH/2,10)
-    draw_shield_bar(window,5,5,arqueiro.shield) #desenha status bar
+    draw_shield_bar(window,5,5,arqueiro.shield) #desenha status ba
 
 
 
     pygame.display.flip()
+
+    #finalização
+listascore = []
+listascore.append(score)
+#cria tela de encerramento do jogo
+if running == False:
+    window.fill((0, 0, 0))
+    myfont=pygame.font.SysFont("Britannic Bold", 50)
+    nlabel=myfont.render("your score is:{:08d}".format(score), 1, (255, 255, 255))
+    nlabel2=myfont.render("Game Over", 1, (255, 0, 0))
+    window.blit(nlabel,(100,200))
+    window.blit(nlabel2,(200,150))
+    pygame.display.flip()
+    time.sleep(3)
+    
+
 
 # ===== Finalização =====
 pygame.quit()
