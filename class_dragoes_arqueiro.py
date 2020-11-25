@@ -150,7 +150,7 @@ class Mob(pygame.sprite.Sprite):#classe dos dragões
         
         self_last_update = pygame.time.get_ticks()
 
-
+#tesyte
     def update(self):
         self.rect.x += self.speedx
         self.rect.y += self.speedy
