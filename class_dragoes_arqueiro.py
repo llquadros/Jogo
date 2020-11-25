@@ -34,7 +34,8 @@ pygame.display.set_caption("The Archer!")
 clock = pygame.time.Clock()
 
 # ----- Inicia assets
-background = os.path.join('imagens', 'cenário.jpg')
+tela_inicial = os.path.join('imagens', 'tela-inicial.jpg')
+background1 = os.path.join('imagens', 'cenário.jpg')
 dragao_image = os.path.join('imagens','Dragão' ,'frame-1.png')
 arqueiro_image = os.path.join('imagens','archer.png')
 flecha_image = os.path.join('imagens','flecha.png')
@@ -45,14 +46,17 @@ musics = os.path.join(os.path.dirname(__file__),'musicas')
 
 alvo_image = os.path.join('imagens', 'alvo.png')
 
+fonte = pygame.font.Font('fonte/PressStart2P.ttf', 28)
 
 
 #carregando imagens
-background = pygame.image.load(background)
+
+background = pygame.image.load(background1)
 dragao_image = pygame.image.load(dragao_image).convert_alpha()
 arqueiro_image = pygame.image.load(arqueiro_image).convert_alpha()
 flecha_image = pygame.image.load(flecha_image).convert_alpha()
-
+startscreen=pygame.image.load(tela_inicial)
+startscreen = pygame.transform.scale(startscreen, (WIDTH, HEIGHT))
 alvo_image = pygame.image.load(alvo_image).convert_alpha()
 
 
@@ -69,6 +73,7 @@ pygame.mixer.music.set_volume(0.4)
 
 ##Escreve na Tela
 font_name = pygame.font.match_font('arial') #fonte da letra
+
 def draw_text(surf, text, size, x, y):
     font = pygame.font.Font(font_name, size)
     text_surface = font.render(text, True, WHITE)
@@ -107,6 +112,7 @@ class Arqueiro(pygame.sprite.Sprite):
         self.rect.bottom = HEIGHT - 10
         self.speedx = 0
         self.shield = 100 #"status bar"-
+         # Só será possível atirar uma vez a cada 500 milissegundos
 
 
     def update(self):
@@ -122,12 +128,11 @@ class Arqueiro(pygame.sprite.Sprite):
         if self.rect.left < 0:
             self.rect.left = 0
 
-    def shoot(self):
-        bullet = Bullet(self.rect.topleft,self.rect.top)
+    def shoot(self, mx, my):
+        bullet = Bullet(self.rect.topleft,self.rect.top, mx, my)
         all_sprites.add(bullet)
         bullets.add(bullet)
         flecha_sound.play()
-
 
 
 
@@ -143,6 +148,7 @@ class Mob(pygame.sprite.Sprite):#classe dos dragões
         self.speedx = random.randrange(-1,3)
         self.rot = 0 #para os dragoes rotacionarem
         self.rot_speed = random.randrange(-8,8) #velocida de rotacao
+        
         self_last_update = pygame.time.get_ticks()
 
 
@@ -156,21 +162,22 @@ class Mob(pygame.sprite.Sprite):#classe dos dragões
 
 
 class Bullet(pygame.sprite.Sprite):#classe para flechas
-    def __init__(self, x, y):
+    def __init__(self, x, y, mx, my):
         pygame.sprite.Sprite.__init__(self)
         self.image = pygame.transform.scale(flecha_image ,(100,50))
         self.rect = self.image.get_rect()
         self.rect.bottom = y
         self.rect.topleft= x
-        self.speedy = math.sqrt((arqueiro.rect.topleft - my)**2)/ math.sqrt((arqueiro.rect.centerx - mx)**2)
-        self.speedx = math.sqrt((arqueiro.rect.centerx - mx)**2)/ math.sqrt((arqueiro.rect.topleft - my)**2)
+        self.speedy = my - arqueiro.rect.top 
+        self.speedx = mx - arqueiro.rect.centerx
     def update(self):
-        self.rect.y += self.speedy
+        self.rect.y += self.speedy/ 50
+        self.rect.x += self.speedx/ 50
 
         # kill if it moves off the top of the screen
         if self.rect.bottom < 0:
             self.kill()
-
+       
 
 
 class Explosion(pygame.sprite.Sprite):
@@ -217,9 +224,26 @@ for i in range(8):
 score = 0  #pontuação inicial
 pygame.mixer.music.play(loops=-1)# #inicia musica de fundo
 
+#-----loop do menu-------
+end = False
+while (end==False):
+    
+    window.blit(startscreen, (0,0))
+    myfont=pygame.font.SysFont("Britannic Bold", 40)
+    nlabel=myfont.render("Press UP to Start", 1, (255, 255, 255))
+    for event in pygame.event.get():
+        if event .type == pygame.QUIT:
+            pygame.quit()
+            sys.exit()
+        if event.type==pygame.KEYDOWN:
+            if event.key == pygame.K_UP:
+                end=True
+    window.blit(nlabel,(200,200))
+    pygame.display.flip()
 
 # Game loop
 running = True
+
 while running:
     # keep loop running at the right speed
     clock.tick(FPS)
@@ -230,8 +254,8 @@ while running:
             running = False
         elif event.type == pygame.KEYDOWN:
             if event.key == pygame.K_SPACE or event.key == pygame.MOUSEBUTTONDOWN:
-                mx, my = pygame.mouse.get_pos
-                arqueiro.shoot()
+                mx, my = pygame.mouse.get_pos()
+                arqueiro.shoot(mx, my)
     
 
 
