@@ -7,6 +7,7 @@
 import pygame
 import random
 import os
+import math
 
 
 
@@ -161,8 +162,8 @@ class Bullet(pygame.sprite.Sprite):#classe para flechas
         self.rect = self.image.get_rect()
         self.rect.bottom = y
         self.rect.topleft= x
-        self.speedy = -5
-
+        self.speedy = math.sqrt((arqueiro.rect.topleft - my)**2)/ math.sqrt((arqueiro.rect.centerx - mx)**2)
+        self.speedx = math.sqrt((arqueiro.rect.centerx - mx)**2)/ math.sqrt((arqueiro.rect.topleft - my)**2)
     def update(self):
         self.rect.y += self.speedy
 
