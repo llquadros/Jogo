@@ -45,7 +45,6 @@ musics = os.path.join(os.path.dirname(__file__),'musicas')
 alvo_image = os.path.join('imagens', 'alvo.png')
 
 
-
 #carregando imagens
 background = pygame.image.load(background)
 dragao_image = pygame.image.load(dragao_image).convert_alpha()
@@ -53,6 +52,11 @@ arqueiro_image = pygame.image.load(arqueiro_image).convert_alpha()
 flecha_image = pygame.image.load(flecha_image).convert_alpha()
 
 alvo_image = pygame.image.load(alvo_image).convert_alpha()
+
+
+
+
+
 
 
 #carregando sons
@@ -106,6 +110,9 @@ class Arqueiro(pygame.sprite.Sprite):
         self.rect.bottom = HEIGHT - 10
         self.speedx = 0
         self.shield = 100 #"status bar"-
+        self.lives = 5 #adicionando vidas
+        self.hidden = False
+        self.hide_timer = pygame.time.get_ticks()
 
 
     def update(self):
@@ -180,7 +187,7 @@ class Explosion(pygame.sprite.Sprite):
         self.rect.center = center
         self.frame = 0
         self.last_update = pygame.time.get_ticks()
-        self.frame_rate = 50
+        self.frame_rate = 75
 
         def update(self):
             now = pygame.time.get_ticks()
@@ -257,6 +264,7 @@ while running:
         all_sprites.add(expl)
         newmob()
         if arqueiro.shield <= 0:
+            arqueiro.shield = 100
             running = False
 
 
