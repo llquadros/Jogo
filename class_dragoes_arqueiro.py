@@ -108,7 +108,7 @@ class Arqueiro(pygame.sprite.Sprite):
         self.image = pygame.transform.scale(arqueiro_image,(80,60))#reajuste de tamanho das imagens
         self.rect = self.image.get_rect()
         self.rect.centerx = WIDTH/10
-        self.rect.bottom = HEIGHT - 10
+        self.rect.bottom = HEIGHT -10
         self.speedx = 0
         self.shield = 100 #"status bar"-
          # Só será possível atirar uma vez a cada 500 milissegundos
@@ -155,12 +155,9 @@ class Mob(pygame.sprite.Sprite):#classe dos dragões
         self.rect.x += self.speedx
         self.rect.y += self.speedy
         if self.rect.left > WIDTH or self.rect.right<0:
-            self.rect.x = random.randrange(0,WIDTH)
-            self.rect.y = random.randrange(0,-10)
+            self.kill
         elif self.rect.top > HEIGHT:
-            self.rect.x = random.randrange(0,WIDTH)
-            self.rect.y = random.randrange(0,-10)
-
+            self.kill
 
 
 class Bullet(pygame.sprite.Sprite):#classe para flechas
@@ -172,8 +169,19 @@ class Bullet(pygame.sprite.Sprite):#classe para flechas
         self.rect.topleft= x
         self.speedy = my - arqueiro.rect.top 
         self.speedx = mx - arqueiro.rect.centerx
-        self.image = pygame.transform.rotate(self.image,20) #para rotacionar
 
+        self.lad_x= mx- arqueiro.rect.centerx # lado x e lado y para calcular o pitagoras
+        self.lad_y= my- arqueiro.rect.centery
+        
+
+
+        self.tang= self.lad_y/self.lad_x
+
+        self.angle =  math.degrees(math.atan(self.tang) #calcula o angulo de lançamento da flecha  
+        
+        self.image = pygame.transform.rotate(self.image,self.angle) #salva a imagem
+
+        print(self.angle)
     def update(self):
         self.rect.y += self.speedy/ 50
         self.rect.x += self.speedx/ 50
