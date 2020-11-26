@@ -82,9 +82,10 @@ def draw_text(surf, text, size, x, y):
 
 
 ##....
-def newmob():
+def newmob(): #adicionar drgão no all_sprites
     m = Mob()
     all_sprites.add(m)
+    mobs.add(m)
     mobs.add(m)
 
 #funcão para o status bar
@@ -156,9 +157,9 @@ class Mob(pygame.sprite.Sprite):#classe dos dragões
         self.rect.y += self.speedy
         if self.rect.left > WIDTH or self.rect.right<0:
             self.kill
+            
         elif self.rect.top > HEIGHT:
             self.kill
-
 
 class Bullet(pygame.sprite.Sprite):#classe para flechas
     def __init__(self, x, y, mx, my):
@@ -172,15 +173,28 @@ class Bullet(pygame.sprite.Sprite):#classe para flechas
 
         self.lad_x= mx- arqueiro.rect.centerx # lado x e lado y para calcular o pitagoras
         self.lad_y= my- arqueiro.rect.centery
-        
-
-
         self.tang= self.lad_y/self.lad_x
-
-        self.angle =  math.degrees(math.atan(self.tang) #calcula o angulo de lançamento da flecha  
+        if self.lad_x == 0 and self.lad_y > 0:
+            self.angle = 360 - 90
+        elif self.lad_x == 0 and self.lad_y < 0:
+            self.angle = 360 - 180
+        else:
+            if self.lad_x > 0 and self.lad_y < 0:
+                self.angle = - math.degrees(math.atan(self.tang))
+            elif self.lad_x > 0 and self.lad_y > 0:
+                self.angle = 360 - math.degrees(math.atan(self.tang))
+            elif self.lad_x < 0 and self.lad_y > 0:
+                self.angle = 180 - math.degrees(math.atan(self.tang))
+            elif self.lad_x < 0 and self.lad_y < 0:
+                self.angle = 180 - math.degrees(math.atan(self.tang))
         
-        self.image = pygame.transform.rotate(self.image,self.angle) #salva a imagem
+        
+        
+        # self.angle =  math.degrees(math.atan(self.tang)) #calcula o angulo de lançamento da flecha  
+        self.image = pygame.transform.rotate(self.image, self.angle) #salva a imagem
+        
 
+        
         print(self.angle)
     def update(self):
         self.rect.y += self.speedy/ 50
@@ -285,6 +299,7 @@ while running:
         expl = Explosion(hit.rect.center, 'lg')
         all_sprites.add(expl)
         newmob()
+        newmob()
 
 
 
@@ -294,6 +309,7 @@ while running:
         arqueiro.shield -= hit.radius * 2 #um escudo para cada acerto cm base em seu raio
         expl = Explosion(hit.rect.center, 'sm')
         all_sprites.add(expl)
+        newmob()
         newmob()
         if arqueiro.shield <= 0:
             running = False
