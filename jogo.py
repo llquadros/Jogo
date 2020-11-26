@@ -3,7 +3,7 @@
 ### nomes: Lucas Quadros, Eduardo Heitor Peixoto, Eric Araujo
 ### professor: Luciano Soares
 
-#obs: Musicas, sons e imagens são de codigo aberto , estavam portanto sem autores para eu colocar como ref.
+#obs: Musicas, sons e imagens são de codigo aberto , estavao portanto sem autores para eu colocar como ref.
 
 
 import pygame
