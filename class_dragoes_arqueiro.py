@@ -153,7 +153,7 @@ class Mob(pygame.sprite.Sprite):#classe dos dragões
         
         self_last_update = pygame.time.get_ticks()
 
-#tesyte
+
     def update(self):
         self.rect.x += self.speedx
         self.rect.y += self.speedy
@@ -231,15 +231,6 @@ class Explosion(pygame.sprite.Sprite):
                     self.image = explosion_anim[self.size][self.frame]
                     self.rect = self.image.get_rect()
                     self.rect.center = center
-
-
-
-
-
-
-
-
-
 
 all_sprites = pygame.sprite.Group()
 mobs =pygame.sprite.Group()
