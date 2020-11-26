@@ -82,9 +82,10 @@ def draw_text(surf, text, size, x, y):
 
 
 ##....
-def newmob():
+def newmob(): #adicionar drgão no all_sprites
     m = Mob()
     all_sprites.add(m)
+    mobs.add(m)
     mobs.add(m)
 
 #funcão para o status bar
@@ -108,7 +109,7 @@ class Arqueiro(pygame.sprite.Sprite):
         self.image = pygame.transform.scale(arqueiro_image,(80,60))#reajuste de tamanho das imagens
         self.rect = self.image.get_rect()
         self.rect.centerx = WIDTH/10
-        self.rect.bottom = HEIGHT - 10
+        self.rect.bottom = HEIGHT -10
         self.speedx = 0
         self.shield = 100 #"status bar"-
          # Só será possível atirar uma vez a cada 500 milissegundos
@@ -155,13 +156,10 @@ class Mob(pygame.sprite.Sprite):#classe dos dragões
         self.rect.x += self.speedx
         self.rect.y += self.speedy
         if self.rect.left > WIDTH or self.rect.right<0:
-            self.rect.x = random.randrange(0,WIDTH)
-            self.rect.y = random.randrange(0,-10)
+            self.kill
+            
         elif self.rect.top > HEIGHT:
-            self.rect.x = random.randrange(0,WIDTH)
-            self.rect.y = random.randrange(0,-10)
-
-
+            self.kill
 
 class Bullet(pygame.sprite.Sprite):#classe para flechas
     def __init__(self, x, y, mx, my):
@@ -172,8 +170,32 @@ class Bullet(pygame.sprite.Sprite):#classe para flechas
         self.rect.topleft= x
         self.speedy = my - arqueiro.rect.top 
         self.speedx = mx - arqueiro.rect.centerx
-        self.image = pygame.transform.rotate(self.image,20) #para rotacionar
 
+        self.lad_x= mx- arqueiro.rect.centerx # lado x e lado y para calcular o pitagoras
+        self.lad_y= my- arqueiro.rect.centery
+        self.tang= self.lad_y/self.lad_x
+        if self.lad_x == 0 and self.lad_y > 0:
+            self.angle = 360 - 90
+        elif self.lad_x == 0 and self.lad_y < 0:
+            self.angle = 360 - 180
+        else:
+            if self.lad_x > 0 and self.lad_y < 0:
+                self.angle = - math.degrees(math.atan(self.tang))
+            elif self.lad_x > 0 and self.lad_y > 0:
+                self.angle = 360 - math.degrees(math.atan(self.tang))
+            elif self.lad_x < 0 and self.lad_y > 0:
+                self.angle = 180 - math.degrees(math.atan(self.tang))
+            elif self.lad_x < 0 and self.lad_y < 0:
+                self.angle = 180 - math.degrees(math.atan(self.tang))
+        
+        
+        
+        # self.angle =  math.degrees(math.atan(self.tang)) #calcula o angulo de lançamento da flecha  
+        self.image = pygame.transform.rotate(self.image, self.angle) #salva a imagem
+        
+
+        
+        print(self.angle)
     def update(self):
         self.rect.y += self.speedy/ 50
         self.rect.x += self.speedx/ 50
@@ -268,6 +290,7 @@ while running:
         expl = Explosion(hit.rect.center, 'lg')
         all_sprites.add(expl)
         newmob()
+        newmob()
 
 
 
@@ -277,6 +300,7 @@ while running:
         arqueiro.shield -= hit.radius * 2 #um escudo para cada acerto cm base em seu raio
         expl = Explosion(hit.rect.center, 'sm')
         all_sprites.add(expl)
+        newmob()
         newmob()
         if arqueiro.shield <= 0:
             running = False
