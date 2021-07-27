@@ -6,12 +6,9 @@
 #obs: Musicas, sons e imagens são de codigo aberto , estavao portanto sem autores para eu colocar como ref.
 
 
-import pygame
-import random
-import os
-import math
-import time
 
+import pygame
+import os
 
 # ----- Gera tela principal
 
